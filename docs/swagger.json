@@ -1,0 +1,144 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "URL Shortener",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "post": {
+                "description": "Получает сокращённую ссылку из полной.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Получить сокращённую ссылку",
+                "parameters": [
+                    {
+                        "description": "Информация об URI",
+                        "name": "uri",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_api_post_root.createAliasInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_api_post_root.createAliasResponse"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_api_post_root.createAliasResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/:alias": {
+            "get": {
+                "description": "Получает полную ссылку по сокращённому идентификатору.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Получить полную ссылку",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "46g1B3ZgAy",
+                        "description": "Alias",
+                        "name": "alias",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_api_get_alias.getUriResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
+        },
+        "internal_controller_http_api_get_alias.getUriResponse": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "example": "https://github.com/spanwalla/url-shortener"
+                }
+            }
+        },
+        "internal_controller_http_api_post_root.createAliasInput": {
+            "type": "object",
+            "required": [
+                "uri"
+            ],
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "example": "https://google.com"
+                }
+            }
+        },
+        "internal_controller_http_api_post_root.createAliasResponse": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string",
+                    "example": "46g1B3ZgAy"
+                }
+            }
+        }
+    }
+}

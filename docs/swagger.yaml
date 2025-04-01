@@ -1,0 +1,95 @@
+basePath: /
+definitions:
+  echo.HTTPError:
+    properties:
+      message: {}
+    type: object
+  internal_controller_http_api_get_alias.getUriResponse:
+    properties:
+      uri:
+        example: https://github.com/spanwalla/url-shortener
+        type: string
+    type: object
+  internal_controller_http_api_post_root.createAliasInput:
+    properties:
+      uri:
+        example: https://google.com
+        type: string
+    required:
+    - uri
+    type: object
+  internal_controller_http_api_post_root.createAliasResponse:
+    properties:
+      alias:
+        example: 46g1B3ZgAy
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: URL Shortener
+  version: "1.0"
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: Получает сокращённую ссылку из полной.
+      parameters:
+      - description: Информация об URI
+        in: body
+        name: uri
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controller_http_api_post_root.createAliasInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controller_http_api_post_root.createAliasResponse'
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controller_http_api_post_root.createAliasResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Получить сокращённую ссылку
+  /:alias:
+    get:
+      description: Получает полную ссылку по сокращённому идентификатору.
+      parameters:
+      - description: Alias
+        example: 46g1B3ZgAy
+        in: path
+        name: alias
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controller_http_api_get_alias.getUriResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Получить полную ссылку
+swagger: "2.0"
