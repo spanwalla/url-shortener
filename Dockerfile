@@ -9,8 +9,12 @@ FROM golang:1.24-alpine3.21 AS builder
 COPY --from=modules /go/pkg /go/pkg
 COPY . /app
 WORKDIR /app
+
+ARG STORAGE_TYPE=postgres
+ENV STORAGE_TYPE=${STORAGE_TYPE}
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go build -tags migrate -o /bin/app ./cmd/app
+    go build $( [ "$STORAGE_TYPE" = "postgres" ] && echo "-tags migrate" ) -o /bin/app ./cmd/app
 
 # Step 3: Final
 FROM scratch

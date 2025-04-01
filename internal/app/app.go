@@ -32,30 +32,43 @@ func Run() {
 	// Config
 	configPath, ok := os.LookupEnv("CONFIG_PATH")
 	if !ok || len(configPath) == 0 {
-		log.Fatal("app - os.LookupEnv: CONFIG_PATH is empty")
+		panic("app - os.LookupEnv: CONFIG_PATH is empty")
 	}
 
 	cfg, err := config.New(configPath)
 	if err != nil {
-		log.Fatal(fmt.Errorf("app - config.New: %w", err))
+		panic(fmt.Errorf("app - config.New: %w", err))
 	}
 
 	// Logger
 	initLogger(cfg.Level)
 	log.Info("Config read")
 
-	// Postgres
-	log.Info("Connecting to postgres...")
-	pg, err := postgres.New(cfg.URL, postgres.MaxPoolSize(cfg.PoolMax))
-	if err != nil {
-		log.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
-	}
-	defer pg.Close()
+	// Init a storage and repos
+	log.Infof("Selected %s storage.", cfg.Type)
+	var repos *repository.Repositories
 
-	// Services and repos
-	log.Info("Initializing services and repos...")
+	switch cfg.Type {
+	case "postgres":
+		log.Info("Connecting to postgres...")
+		var pg *postgres.Postgres
+		pg, err = postgres.New(cfg.URL, postgres.MaxPoolSize(cfg.PoolMax))
+		if err != nil {
+			panic(fmt.Errorf("app - Run - postgres.New: %w", err))
+		}
+		defer pg.Close()
+
+		repos = repository.NewPostgresRepositories(pg)
+	case "memory":
+		repos = repository.NewMemoryRepositories()
+	default:
+		panic(fmt.Errorf("app - Run - unsupported storage type: %s", cfg.Type))
+	}
+
+	// Services and dependencies
+	log.Info("Initializing services and dependencies...")
 	services := service.New(service.Dependencies{
-		Repos:               repository.NewPostgresRepositories(pg),
+		Repos:               repos,
 		Encoder:             encoder.NewRandom(cfg.Alphabet, time.Now().UnixNano()),
 		AliasLength:         cfg.Length,
 		AttemptsOnCollision: cfg.Attempts,

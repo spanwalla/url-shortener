@@ -7,7 +7,10 @@ networks:
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        STORAGE_TYPE: ${STORAGE_TYPE}
     environment:
       CONFIG_PATH: config/config.yaml
       PG_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}

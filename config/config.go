@@ -14,6 +14,7 @@ type (
 		PG         `yaml:"postgres"`
 		Alias      `yaml:"alias"`
 		Shortening `yaml:"shortening"`
+		Storage    `yaml:"storage"`
 	}
 
 	App struct {
@@ -41,6 +42,10 @@ type (
 
 	Shortening struct {
 		Attempts int `env-required:"true" yaml:"attempts" env:"SHORTENING_ATTEMPTS"`
+	}
+
+	Storage struct {
+		Type string `env-default:"postgres" yaml:"type" env:"STORAGE_TYPE"`
 	}
 )
 
