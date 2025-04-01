@@ -25,17 +25,18 @@ type createAliasResponse struct {
 	Alias string `json:"alias" example:"46g1B3ZgAy"`
 }
 
-// Handle -.
-// @Summary Получить сокращённую ссылку
-// @Description Получает сокращённую ссылку из полной.
-// @Param uri body createAliasInput true "Информация об URI"
-// @Accept json
-// @Produce json
-// @Success 200 {object} createAliasResponse
-// @Success 201 {object} createAliasResponse
-// @Failure 400 {object} echo.HTTPError
-// @Failure 500 {object} echo.HTTPError
-// @Router / [post]
+// Handle handles HTTP-request
+//
+//	@Summary		Получить сокращённую ссылку
+//	@Description	Получает сокращённую ссылку из полной.
+//	@Param			uri	body	createAliasInput	true	"Информация об URI"
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	createAliasResponse
+//	@Success		201	{object}	createAliasResponse
+//	@Failure		400	{object}	echo.HTTPError
+//	@Failure		500	{object}	echo.HTTPError
+//	@Router			/ [post]
 func (h *handler) Handle(c echo.Context) error {
 	var input createAliasInput
 

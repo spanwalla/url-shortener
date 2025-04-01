@@ -26,16 +26,17 @@ type getUriResponse struct {
 	URI string `json:"uri" example:"https://github.com/spanwalla/url-shortener"`
 }
 
-// Handle -.
-// @Summary Получить полную ссылку
-// @Description Получает полную ссылку по сокращённому идентификатору.
-// @Param alias path string true "Alias" example(46g1B3ZgAy) len(10)
-// @Produce json
-// @Success 200 {object} getUriResponse
-// @Failure 400 {object} echo.HTTPError
-// @Failure 404 {object} echo.HTTPError
-// @Failure 500 {object} echo.HTTPError
-// @Router /:alias [get]
+// Handle handles HTTP-request
+//
+//	@Summary		Получить полную ссылку
+//	@Description	Получает полную ссылку по сокращённому идентификатору.
+//	@Param			alias	path	string	true	"Alias"	example(46g1B3ZgAy)	len(10)
+//	@Produce		json
+//	@Success		200	{object}	getUriResponse
+//	@Failure		400	{object}	echo.HTTPError
+//	@Failure		404	{object}	echo.HTTPError
+//	@Failure		500	{object}	echo.HTTPError
+//	@Router			/:alias [get]
 func (h *handler) Handle(c echo.Context) error {
 	var input getUriInput
 

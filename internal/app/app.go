@@ -21,11 +21,11 @@ import (
 	"github.com/spanwalla/url-shortener/pkg/validator"
 )
 
-// @title URL Shortener
-// @version 1.0
+//	@title		URL Shortener
+//	@version	1.0
 
-// @host localhost:8080
-// @BasePath /
+//	@host		localhost:8080
+//	@BasePath	/
 
 // Run creates objects via constructors
 func Run() {

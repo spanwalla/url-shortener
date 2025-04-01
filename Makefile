@@ -30,6 +30,7 @@ linter-golangci: ### Check by golangci linter
 .PHONY: linter-golangci
 
 swag: ### Generate swagger docs
+	go tool github.com/swaggo/swag/cmd/swag fmt
 	go tool github.com/swaggo/swag/cmd/swag init -g 'internal/app/app.go' --parseInternal --parseDependency
 .PHONY: swag
 
