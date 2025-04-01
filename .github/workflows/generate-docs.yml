@@ -19,13 +19,13 @@ jobs:
       with:
         go-version: '1.24'
 
-    - name: Install swaggo/swag
-      run: go install github.com/swaggo/swag/cmd/swag@latest
+    - name: Install dependencies
+      run: go mod tidy
 
     - name: Generate Swagger Docs And Format Comments
       run: |
-        swag fmt
-        swag init -g 'internal/app/app.go' --parseInternal --parseDependency
+        touch .env
+        make swag
 
     - name: Commit Swagger Docs
       run: |
