@@ -5,8 +5,10 @@ name: Generate Swagger Docs
 on:
   push:
     branches: [ "main" ]
+    paths: [ "internal/controller/**", "internal/app/app.go" ]
   pull_request:
     branches: [ "main" ]
+    paths: [ "internal/controller/**", "internal/app/app.go" ]
 
 jobs:
   generate-docs:
@@ -31,6 +33,6 @@ jobs:
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
-        git add .
+        git add /docs /internal
         git commit -m 'Update Swagger docs and formatting' || echo 'No changes'
         git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
